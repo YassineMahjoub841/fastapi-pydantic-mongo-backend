@@ -36,8 +36,8 @@ class JobModel(BaseModel):
     # but provided as `id` in the API requests and responses.
     id: Optional[PyObjectId] = Field(alias="_id", default=None)
     title: str = Field(...)
-    email: EmailStr = Field(...)
-    course: str = Field(...)
+    #email: EmailStr = Field(...)
+    desc: str = Field(...)
     gpa: float = Field(..., le=4.0)
     model_config = ConfigDict(
         populate_by_name=True,
@@ -46,7 +46,7 @@ class JobModel(BaseModel):
             "example": {
                 "title": "Jane Doe",
                 "email": "jdoe@example.com",
-                "course": "Experiments, Science, and Fashion in Nanophotonics",
+                "desc": "Experiments, Science, and Fashion in Nanophotonics",
                 "gpa": 3.0,
             }
         },
