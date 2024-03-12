@@ -14,28 +14,28 @@ from pymongo import ReturnDocument
 
 
 app = FastAPI(
-    title="Student Course API",
-    summary="A sample application showing how to use FastAPI to add a ReST API to a MongoDB collection.",
+    title="Job Posting API",
+    summary="An MVP-sized application using FastAPI to add a ReST API to a MongoDB 'Jobs' collection.",
 )
 client = motor.motor_asyncio.AsyncIOMotorClient(os.environ["MONGODB_URL"])
-db = client.college
-student_collection = db.get_collection("students")
+db = client.test_db
+job_collection = db.get_collection("jobs")
 
 # Represents an ObjectId field in the database.
 # It will be represented as a `str` on the model so that it can be serialized to JSON.
 PyObjectId = Annotated[str, BeforeValidator(str)]
 
 
-class StudentModel(BaseModel):
+class JobModel(BaseModel):
     """
-    Container for a single student record.
+    Container for a single Job record.
     """
 
-    # The primary key for the StudentModel, stored as a `str` on the instance.
+    # The primary key for the JobModel, stored as a `str` on the instance.
     # This will be aliased to `_id` when sent to MongoDB,
     # but provided as `id` in the API requests and responses.
     id: Optional[PyObjectId] = Field(alias="_id", default=None)
-    name: str = Field(...)
+    title: str = Field(...)
     email: EmailStr = Field(...)
     course: str = Field(...)
     gpa: float = Field(..., le=4.0)
@@ -44,7 +44,7 @@ class StudentModel(BaseModel):
         arbitrary_types_allowed=True,
         json_schema_extra={
             "example": {
-                "name": "Jane Doe",
+                "title": "Jane Doe",
                 "email": "jdoe@example.com",
                 "course": "Experiments, Science, and Fashion in Nanophotonics",
                 "gpa": 3.0,
@@ -83,26 +83,26 @@ class StudentCollection(BaseModel):
     This exists because providing a top-level array in a JSON response can be a [vulnerability](https://haacked.com/archive/2009/06/25/json-hijacking.aspx/)
     """
 
-    students: List[StudentModel]
+    students: List[JobModel]
 
 
 @app.post(
     "/students/",
     response_description="Add new student",
-    response_model=StudentModel,
+    response_model=JobModel,
     status_code=status.HTTP_201_CREATED,
     response_model_by_alias=False,
 )
-async def create_student(student: StudentModel = Body(...)):
+async def create_student(student: JobModel = Body(...)):
     """
     Insert a new student record.
 
     A unique `id` will be created and provided in the response.
     """
-    new_student = await student_collection.insert_one(
+    new_student = await job_collection.insert_one(
         student.model_dump(by_alias=True, exclude=["id"])
     )
-    created_student = await student_collection.find_one(
+    created_student = await job_collection.find_one(
         {"_id": new_student.inserted_id}
     )
     return created_student
@@ -120,13 +120,13 @@ async def list_students():
 
     The response is unpaginated and limited to 1000 results.
     """
-    return StudentCollection(students=await student_collection.find().to_list(1000))
+    return StudentCollection(students=await job_collection.find().to_list(1000))
 
 
 @app.get(
     "/students/{id}",
     response_description="Get a single student",
-    response_model=StudentModel,
+    response_model=JobModel,
     response_model_by_alias=False,
 )
 async def show_student(id: str):
@@ -134,7 +134,7 @@ async def show_student(id: str):
     Get the record for a specific student, looked up by `id`.
     """
     if (
-        student := await student_collection.find_one({"_id": ObjectId(id)})
+        student := await job_collection.find_one({"_id": ObjectId(id)})
     ) is not None:
         return student
 
@@ -144,7 +144,7 @@ async def show_student(id: str):
 @app.put(
     "/students/{id}",
     response_description="Update a student",
-    response_model=StudentModel,
+    response_model=JobModel,
     response_model_by_alias=False,
 )
 async def update_student(id: str, student: UpdateStudentModel = Body(...)):
@@ -159,7 +159,7 @@ async def update_student(id: str, student: UpdateStudentModel = Body(...)):
     }
 
     if len(student) >= 1:
-        update_result = await student_collection.find_one_and_update(
+        update_result = await job_collection.find_one_and_update(
             {"_id": ObjectId(id)},
             {"$set": student},
             return_document=ReturnDocument.AFTER,
@@ -170,7 +170,7 @@ async def update_student(id: str, student: UpdateStudentModel = Body(...)):
             raise HTTPException(status_code=404, detail=f"Student {id} not found")
 
     # The update is empty, but we should still return the matching document:
-    if (existing_student := await student_collection.find_one({"_id": id})) is not None:
+    if (existing_student := await job_collection.find_one({"_id": id})) is not None:
         return existing_student
 
     raise HTTPException(status_code=404, detail=f"Student {id} not found")
@@ -181,7 +181,7 @@ async def delete_student(id: str):
     """
     Remove a single student record from the database.
     """
-    delete_result = await student_collection.delete_one({"_id": ObjectId(id)})
+    delete_result = await job_collection.delete_one({"_id": ObjectId(id)})
 
     if delete_result.deleted_count == 1:
         return Response(status_code=status.HTTP_204_NO_CONTENT)
