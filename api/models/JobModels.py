@@ -3,11 +3,13 @@ from bson import ObjectId
 from typing import Optional, List, TypeVar , Union
 from typing_extensions import Annotated
 from pydantic.functional_validators import BeforeValidator, AfterValidator
+from datetime import datetime
 
 from enum import Enum
 from ..utils import *
+#from .MiscModels import CreatedUpdatedAt
 
-_unix_ts = dict(example=get_time())
+#_unix_ts = dict(example=get_time())
 """Common attributes for all Unix timestamp fields"""
 
 # Represents an ObjectId field in the database.
@@ -64,38 +66,36 @@ class JobModel(BaseModel):
     lang: UniqueGenericList[LanguageEnum] = Field(description="Spoken languages required for the Job")
     work_model: WorkModelEnum = Field(description="The Job's work model")
 
-    created : Union[int, float]= Field(
+    created : datetime= Field(
         alias="created",
         gt=0,
-        description="When the Job was created (Unix timestamp)",
-        json_schema_extra=_unix_ts
+        description="When the Job was created",
+        default_factory=datetime.now
     )
-    updated : Union[int, float] = Field(
+    updated : Optional[datetime]= Field(
         alias="updated",
         gt=0,
-        description="When the Job  was updated for the last time (Unix timestamp)",
-        json_schema_extra=_unix_ts
+        description="When the Job was updated",
+        default=None
     )
     model_config = ConfigDict(
         populate_by_name=True,  
         arbitrary_types_allowed=True,
         json_schema_extra={
-            "example": {
-        "title": "reprehenderit eu",
         "degree": {
-          "degree": "associate"
+            "level": "associate"
         },
         "desc": "non nisi elit aliqua",
-        "skills": [
-          "qui in"
-        ],
         "lang": [
-        "arabic","french","english"
+            "arabic",
+            "french",
+            "english"
         ],
-        "work_model": "remote",
-        "created": 95704773.096542,
-        "updated": 15550303.247843325
-      }
+        "skills": [
+            "qui in"
+        ],
+        "title": "reprehenderit eu",
+        "work_model": "remote"
         },
     )
 class UpdateJobModel(BaseModel):
@@ -110,6 +110,12 @@ class UpdateJobModel(BaseModel):
     skills: Optional[UniqueStrList] = None
     lang: Optional[UniqueGenericList[LanguageEnum]] = None
     work_model: Optional[WorkModelEnum] = None
+    updated: Optional[datetime] = Field(
+        alias="updated",
+        gt=0,
+        description="When the Job was updated",
+        default_factory=datetime.now
+    )
     model_config = ConfigDict(
         arbitrary_types_allowed=True,
         json_encoders={ObjectId: str},
