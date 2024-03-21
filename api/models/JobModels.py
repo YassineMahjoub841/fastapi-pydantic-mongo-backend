@@ -1,11 +1,12 @@
-from pydantic import ConfigDict, BaseModel, Field, EmailStr
+# Installed imports
+from pydantic import ConfigDict, BaseModel, Field
 from bson import ObjectId
 from typing import Optional, List, TypeVar 
 from typing_extensions import Annotated
 from pydantic.functional_validators import BeforeValidator, AfterValidator
 from datetime import datetime
-
 from enum import Enum
+# Local imports
 from ..utils import *
 
 
@@ -13,13 +14,18 @@ from ..utils import *
 # It will be represented as a `str` on the model so that it can be serialized to JSON.
 PyObjectId = Annotated[str, BeforeValidator(str)]
 
-T = TypeVar("T")
+# Represents a list of unique items.
+# It will be represented as a `list[T]` on the model so that it can be serialized to JSON.
+# T is the type of the list items
+T = TypeVar("T") 
 UniqueGenericList = Annotated[list[T], BeforeValidator(validate_unique_list), Field(json_schema_extra={'uniqueItems': True})]
-
 
 # Represents a list of unique strings.
 # It will be represented as a `list[str]` on the model so that it can be serialized to JSON.
 UniqueStrList = Annotated[list[str], BeforeValidator(validate_unique_list), Field(json_schema_extra={'uniqueItems': True})]
+
+
+# Represents the spoken languages required for a Job.
 class LanguageEnum(str, Enum):
     en = 'english'
     fr = 'french'
@@ -35,18 +41,26 @@ class LanguageEnum(str, Enum):
     ko = 'korean'
     nl = 'dutch'
     hu = 'hungarian'
+
+# Represents the work model for a Job.
 class WorkModelEnum(str, Enum):
     rm = 'remote'
     os = 'on-site'
     hy = 'hybrid'
+
+# Represents the degree required for a Job.
 class DegreeEnum(str, Enum):
     associate = 'associate'
     bachelor = 'bachelors'
     master = 'masters'
     phd = 'phd'
+
+# Represents a degree and major required for a Job.
 class DegreeModel(BaseModel):
     level: DegreeEnum = Field(description="Minimum degree required")    
     major: Optional[str] = Field(description="Major required", default=None)
+
+# Represents a single Job record.
 class JobModel(BaseModel):
     """
     Container for a single Job record.
@@ -95,6 +109,8 @@ class JobModel(BaseModel):
         "work_model": "remote"
         },
     )
+
+# Represents a set of optional updates to be made to a Job record.
 class UpdateJobModel(BaseModel):
 
     """
@@ -125,6 +141,8 @@ class UpdateJobModel(BaseModel):
             }
         },
     )
+
+# Represents a list of `JobModel` instances.
 class JobCollection(BaseModel):
     """
     A container holding a list of `JobModel` instances.
