@@ -1,16 +1,13 @@
 from pydantic import ConfigDict, BaseModel, Field, EmailStr
 from bson import ObjectId
-from typing import Optional, List, TypeVar , Union
+from typing import Optional, List, TypeVar 
 from typing_extensions import Annotated
 from pydantic.functional_validators import BeforeValidator, AfterValidator
 from datetime import datetime
 
 from enum import Enum
 from ..utils import *
-#from .MiscModels import CreatedUpdatedAt
 
-#_unix_ts = dict(example=get_time())
-"""Common attributes for all Unix timestamp fields"""
 
 # Represents an ObjectId field in the database.
 # It will be represented as a `str` on the model so that it can be serialized to JSON.
