@@ -1,12 +1,21 @@
 from fastapi import FastAPI
 from api.routes.jobs import router as JobsRouter
+from contextlib import asynccontextmanager
+from api.config.mongodb import initiate_database
 
 
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    #Launch database
+    await initiate_database()
+    yield
 
 app = FastAPI(
     title="Job Posting API",
     summary="An MVP-sized application using FastAPI to add a ReST API to a MongoDB 'Jobs' collection.",
+    lifespan=lifespan
 )
 
 

@@ -6,6 +6,8 @@ from typing_extensions import Annotated
 from pydantic.functional_validators import BeforeValidator, AfterValidator
 from datetime import datetime
 from enum import Enum
+
+from beanie import Document
 # Local imports
 from ..utils import *
 
@@ -60,8 +62,9 @@ class DegreeModel(BaseModel):
     level: DegreeEnum = Field(description="Minimum degree required")    
     major: Optional[str] = Field(description="Major required", default=None)
 
+
 # Represents a single Job record.
-class JobModel(BaseModel):
+class JobModel(Document):
     """
     Container for a single Job record.
     """
@@ -69,14 +72,13 @@ class JobModel(BaseModel):
     # The primary key for the JobModel, stored as a `str` on the instance.
     # This will be aliased to `_id` when sent to MongoDB,
     # but provided as `id` in the API requests and responses.
-    id: Optional[PyObjectId] = Field(alias="_id", default=None)
+    #id: Optional[PyObjectId] = Field(alias="_id", default=None)
     title: str = Field(description="Job title")
     degree: DegreeModel = Field(description="Degree & Major required for the Job")
     desc: str = Field(description="Job description & responsibilities")
     skills: UniqueStrList = Field(description="Skillset required for the Job")
     lang: UniqueGenericList[LanguageEnum] = Field(description="Spoken languages required for the Job")
     work_model: WorkModelEnum = Field(description="The Job's work model")
-
     created : datetime= Field(
         alias="created",
         gt=0,
@@ -109,6 +111,8 @@ class JobModel(BaseModel):
         "work_model": "remote"
         },
     )
+    class Settings:
+        name = "jobs"
 
 # Represents a set of optional updates to be made to a Job record.
 class UpdateJobModel(BaseModel):

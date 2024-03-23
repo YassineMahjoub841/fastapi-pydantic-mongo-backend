@@ -1,14 +1,15 @@
 # local imports
 from ..models.JobModels import JobModel, UpdateJobModel, JobCollection
-from ..config.mongodb import job_collection
+#from ..config.mongodb import job_collection
 # installed imports
 from fastapi import APIRouter, Body, HTTPException, status
 from fastapi.responses import Response
 from bson import ObjectId
 from pymongo import ReturnDocument
-
+from beanie import PydanticObjectId
 
 router = APIRouter()
+job_collection = JobModel
 
 
 # Endpoints
@@ -26,12 +27,8 @@ async def create_job(job: JobModel = Body(...)):
 
     A unique `id` will be created and provided in the response.
     """
-    new_job = await job_collection.insert_one(
-        job.model_dump(by_alias=True, exclude=["id"])
-    )
-    created_job = await job_collection.find_one(
-        {"_id": new_job.inserted_id}
-    )
+    new_job = await job.create()
+    created_job = await job_collection.get(new_job.id)
     return created_job
 
 @router.get(
@@ -46,7 +43,7 @@ async def list_jobs():
 
     The response is unpaginated and limited to 1000 results.
     """
-    return JobCollection(jobs=await job_collection.find().to_list(1000))
+    return JobCollection(jobs= await JobModel.find_all().to_list())
 
 @router.get(
     "/{id}",
@@ -54,12 +51,12 @@ async def list_jobs():
     response_model=JobModel,
     response_model_by_alias=False,
 )
-async def show_job(id: str):
+async def show_job(id: PydanticObjectId):
     """
     Get the record for a specific job, looked up by `id`.
     """
     if (
-        job := await job_collection.find_one({"_id": ObjectId(id)})
+        job := await JobModel.get(id)
     ) is not None:
         return job
 
@@ -71,7 +68,7 @@ async def show_job(id: str):
     response_model=JobModel,
     response_model_by_alias=False,
 )
-async def update_job(id: str, job: UpdateJobModel = Body(...)):
+async def update_job(id: PydanticObjectId, job: UpdateJobModel = Body(...)):
     """
     Update individual fields of an existing job record.
 
@@ -83,30 +80,35 @@ async def update_job(id: str, job: UpdateJobModel = Body(...)):
     }
 
     if len(job) >= 1:
-        update_result = await job_collection.find_one_and_update(
-            {"_id": ObjectId(id)},
-            {"$set": job},
-            return_document=ReturnDocument.AFTER,
-        )
-        if update_result is not None:
-            return update_result
+        update_query = {"$set": job}
+        #update_result = await job_collection.find_one_and_update(
+        #    {"_id": ObjectId(id)},
+        #    {"$set": job},
+        #    return_document=ReturnDocument.AFTER,
+        #)
+        job_to_update= await JobModel.get(id)
+        if job_to_update is not None:
+            await job_to_update.update(update_query)
+            updated_job = await JobModel.get(id)
+            return updated_job
         else:
             raise HTTPException(status_code=404, detail=f"Job {id} not found")
 
     # The update is empty, but we should still return the matching document:
-    if (existing_job := await job_collection.find_one({"_id": id})) is not None:
+    if (existing_job:= await job_collection.get(id)) is not None:
         return existing_job
 
     raise HTTPException(status_code=404, detail=f"Job {id} not found")
 
 @router.delete("/{id}", response_description="Delete a job")
-async def delete_job(id: str):
+async def delete_job(id: PydanticObjectId):
     """
     Remove a single job record from the database.
     """
-    delete_result = await job_collection.delete_one({"_id": ObjectId(id)})
+    job_to_delete = await job_collection.get(id)
 
-    if delete_result.deleted_count == 1:
+    if job_to_delete:
+        await job_to_delete.delete()
         return Response(status_code=status.HTTP_204_NO_CONTENT)
 
     raise HTTPException(status_code=404, detail=f"Job {id} not found")

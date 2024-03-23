@@ -1,0 +1,109 @@
+Channels:
+ - conda-forge
+ - defaults
+ - merv
+Platform: win-64
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: C:\Users\DELL\.conda\envs\fastapi-py310
+
+  added / updated specs:
+    - conda-tree
+    - networkx
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    archspec-0.2.3             |     pyhd8ed1ab_0          48 KB  conda-forge
+    boltons-23.1.1             |     pyhd8ed1ab_0         297 KB  conda-forge
+    conda-libmamba-solver-24.1.0|     pyhd8ed1ab_0          40 KB  conda-forge
+    conda-package-handling-2.2.0|     pyh38be061_0         249 KB  conda-forge
+    conda-package-streaming-0.9.0|     pyhd8ed1ab_0          19 KB  conda-forge
+    conda-tree-1.1.0           |     pyhd8ed1ab_2          12 KB  conda-forge
+    distro-1.9.0               |     pyhd8ed1ab_0          41 KB  conda-forge
+    fmt-10.2.1                 |       h181d51b_0         181 KB  conda-forge
+    jsonpatch-1.33             |     pyhd8ed1ab_0          17 KB  conda-forge
+    jsonpointer-2.4            |  py312h2e8e312_3          34 KB  conda-forge
+    krb5-1.21.2                |       heb0366b_0         694 KB  conda-forge
+    libarchive-3.7.2           |       h313118b_1         942 KB  conda-forge
+    libcurl-8.6.0              |       hd5e4a3a_0         318 KB  conda-forge
+    libiconv-1.17              |       hcfcfb64_2         621 KB  conda-forge
+    libmamba-1.5.7             |       h3f09ed1_0         3.4 MB  conda-forge
+    libmambapy-1.5.7           |  py312h66cf91f_0         701 KB  conda-forge
+    libsolv-0.7.28             |       h12be248_0         1.7 MB  conda-forge
+    libssh2-1.11.0             |       h7dfc565_0         261 KB  conda-forge
+    libxml2-2.12.6             |       hc3477c8_0         1.6 MB  conda-forge
+    lz4-c-1.9.4                |       hcfcfb64_0         131 KB  conda-forge
+    lzo-2.10                   |    he774522_1000         166 KB  conda-forge
+    menuinst-2.0.2             |  py312h53d5487_0         123 KB  conda-forge
+    networkx-3.2.1             |     pyhd8ed1ab_0         1.1 MB  conda-forge
+    packaging-24.0             |     pyhd8ed1ab_0          49 KB  conda-forge
+    platformdirs-4.2.0         |     pyhd8ed1ab_0          20 KB  conda-forge
+    pluggy-1.4.0               |     pyhd8ed1ab_0          23 KB  conda-forge
+    pybind11-abi-4             |       hd8ed1ab_3          10 KB  conda-forge
+    pycosat-0.6.6              |  py312he70551f_0          76 KB  conda-forge
+    reproc-14.2.4.post0        |       hcfcfb64_1          36 KB  conda-forge
+    reproc-cpp-14.2.4.post0    |       h63175ca_1          29 KB  conda-forge
+    ruamel.yaml-0.18.6         |  py312he70551f_0         261 KB  conda-forge
+    ruamel.yaml.clib-0.2.8     |  py312he70551f_0          94 KB  conda-forge
+    tqdm-4.66.2                |     pyhd8ed1ab_0          87 KB  conda-forge
+    truststore-0.8.0           |     pyhd8ed1ab_0          20 KB  conda-forge
+    yaml-cpp-0.8.0             |       h63175ca_0         133 KB  conda-forge
+    zstandard-0.22.0           |  py312h01d794b_0         314 KB  conda-forge
+    zstd-1.5.5                 |       h12be248_0         335 KB  conda-forge
+    ------------------------------------------------------------
+                                           Total:        14.0 MB
+
+The following NEW packages will be INSTALLED:
+
+  archspec           conda-forge/noarch::archspec-0.2.3-pyhd8ed1ab_0 
+  boltons            conda-forge/noarch::boltons-23.1.1-pyhd8ed1ab_0 
+  conda              conda-forge/win-64::conda-24.1.2-py312h2e8e312_0 
+  conda-libmamba-so~ conda-forge/noarch::conda-libmamba-solver-24.1.0-pyhd8ed1ab_0 
+  conda-package-han~ conda-forge/noarch::conda-package-handling-2.2.0-pyh38be061_0 
+  conda-package-str~ conda-forge/noarch::conda-package-streaming-0.9.0-pyhd8ed1ab_0 
+  conda-tree         conda-forge/noarch::conda-tree-1.1.0-pyhd8ed1ab_2 
+  distro             conda-forge/noarch::distro-1.9.0-pyhd8ed1ab_0 
+  fmt                conda-forge/win-64::fmt-10.2.1-h181d51b_0 
+  jsonpatch          conda-forge/noarch::jsonpatch-1.33-pyhd8ed1ab_0 
+  jsonpointer        conda-forge/win-64::jsonpointer-2.4-py312h2e8e312_3 
+  krb5               conda-forge/win-64::krb5-1.21.2-heb0366b_0 
+  libarchive         conda-forge/win-64::libarchive-3.7.2-h313118b_1 
+  libcurl            conda-forge/win-64::libcurl-8.6.0-hd5e4a3a_0 
+  libiconv           conda-forge/win-64::libiconv-1.17-hcfcfb64_2 
+  libmamba           conda-forge/win-64::libmamba-1.5.7-h3f09ed1_0 
+  libmambapy         conda-forge/win-64::libmambapy-1.5.7-py312h66cf91f_0 
+  libsolv            conda-forge/win-64::libsolv-0.7.28-h12be248_0 
+  libssh2            conda-forge/win-64::libssh2-1.11.0-h7dfc565_0 
+  libxml2            conda-forge/win-64::libxml2-2.12.6-hc3477c8_0 
+  lz4-c              conda-forge/win-64::lz4-c-1.9.4-hcfcfb64_0 
+  lzo                conda-forge/win-64::lzo-2.10-he774522_1000 
+  menuinst           conda-forge/win-64::menuinst-2.0.2-py312h53d5487_0 
+  networkx           conda-forge/noarch::networkx-3.2.1-pyhd8ed1ab_0 
+  packaging          conda-forge/noarch::packaging-24.0-pyhd8ed1ab_0 
+  platformdirs       conda-forge/noarch::platformdirs-4.2.0-pyhd8ed1ab_0 
+  pluggy             conda-forge/noarch::pluggy-1.4.0-pyhd8ed1ab_0 
+  pybind11-abi       conda-forge/noarch::pybind11-abi-4-hd8ed1ab_3 
+  pycosat            conda-forge/win-64::pycosat-0.6.6-py312he70551f_0 
+  reproc             conda-forge/win-64::reproc-14.2.4.post0-hcfcfb64_1 
+  reproc-cpp         conda-forge/win-64::reproc-cpp-14.2.4.post0-h63175ca_1 
+  ruamel.yaml        conda-forge/win-64::ruamel.yaml-0.18.6-py312he70551f_0 
+  ruamel.yaml.clib   conda-forge/win-64::ruamel.yaml.clib-0.2.8-py312he70551f_0 
+  tqdm               conda-forge/noarch::tqdm-4.66.2-pyhd8ed1ab_0 
+  truststore         conda-forge/noarch::truststore-0.8.0-pyhd8ed1ab_0 
+  yaml-cpp           conda-forge/win-64::yaml-cpp-0.8.0-h63175ca_0 
+  zstandard          conda-forge/win-64::zstandard-0.22.0-py312h01d794b_0 
+  zstd               conda-forge/win-64::zstd-1.5.5-h12be248_0 
+
+
+Proceed ([y]/n)? 
+
+Downloading and Extracting Packages: ...working... done
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
