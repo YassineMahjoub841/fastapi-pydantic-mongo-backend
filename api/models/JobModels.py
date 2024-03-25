@@ -1,3 +1,7 @@
+""" JOB MODELS
+Pydantic Model classes relative to the Job object/collection in the database.
+"""
+
 # Installed imports
 from pydantic import ConfigDict, BaseModel, Field
 from bson import ObjectId
@@ -61,7 +65,6 @@ class DegreeEnum(str, Enum):
 class DegreeModel(BaseModel):
     level: DegreeEnum = Field(description="Minimum degree required")    
     major: Optional[str] = Field(description="Major required", default=None)
-
 
 # Represents a single Job record.
 class JobModel(Document):

@@ -1,3 +1,7 @@
+"""JOB ROUTES
+Routes for managing job data in the database.
+"""
+
 # local imports
 from ..models.JobModels import JobModel, UpdateJobModel, JobCollection
 #from ..config.mongodb import job_collection
@@ -8,11 +12,10 @@ from bson import ObjectId
 from pymongo import ReturnDocument
 from beanie import PydanticObjectId
 
+# set up router
 router = APIRouter()
-job_collection = JobModel
 
 
-# Endpoints
 
 @router.post(
     "/",
@@ -28,7 +31,7 @@ async def create_job(job: JobModel = Body(...)):
     A unique `id` will be created and provided in the response.
     """
     new_job = await job.create()
-    created_job = await job_collection.get(new_job.id)
+    created_job = await JobModel.get(new_job.id)
     return created_job
 
 @router.get(
@@ -95,7 +98,7 @@ async def update_job(id: PydanticObjectId, job: UpdateJobModel = Body(...)):
             raise HTTPException(status_code=404, detail=f"Job {id} not found")
 
     # The update is empty, but we should still return the matching document:
-    if (existing_job:= await job_collection.get(id)) is not None:
+    if (existing_job:= await JobModel.get(id)) is not None:
         return existing_job
 
     raise HTTPException(status_code=404, detail=f"Job {id} not found")
@@ -105,7 +108,7 @@ async def delete_job(id: PydanticObjectId):
     """
     Remove a single job record from the database.
     """
-    job_to_delete = await job_collection.get(id)
+    job_to_delete = await JobModel.get(id)
 
     if job_to_delete:
         await job_to_delete.delete()

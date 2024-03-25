@@ -23,6 +23,15 @@ def get_uuid() -> str:
 
 T = TypeVar("T")
 def validate_unique_list(v: list[T]) -> list[T]:
+    """
+    Validates that the input list contains unique elements and raises an exception if it doesn't. 
+    Args:
+        v: A list of type T to be validated for uniqueness.
+    Returns:
+        The input list v if it contains unique elements.
+    Raises:
+        PydanticCustomError: If the input list v contains duplicate elements.
+    """
     print(len(v), len(set(v)))
     if len(v) != len(set(v)):
         raise PydanticCustomError('unique_list', 'List must be unique')
