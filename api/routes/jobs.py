@@ -112,6 +112,6 @@ async def delete_job(id: PydanticObjectId):
 
     if job_to_delete:
         await job_to_delete.delete()
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
+        return Response(status_code=status.HTTP_204_NO_CONTENT,content=f"Job {id} deleted")
 
     raise HTTPException(status_code=404, detail=f"Job {id} not found")

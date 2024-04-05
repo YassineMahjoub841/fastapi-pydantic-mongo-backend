@@ -86,13 +86,15 @@ class JobModel(Document):
         alias="created",
         gt=0,
         description="When the Job was created",
-        default_factory=datetime.now
+        default_factory=datetime.now,
+        exclude=True
     )
     updated : Optional[datetime]= Field(
         alias="updated",
         gt=0,
         description="When the Job was updated",
-        default=None
+        default=None,
+        exclude=True
     )
     model_config = ConfigDict(
         populate_by_name=True,  
@@ -141,10 +143,20 @@ class UpdateJobModel(BaseModel):
         json_encoders={ObjectId: str},
         json_schema_extra={
             "example": {
-                "name": "Jane Doe",
-                "email": "jdoe@example.com",
-                "course": "Experiments, Science, and Fashion in Nanophotonics",
-                "gpa": 3.0,
+                "title": "please work (edited again)",
+                "degree": {
+                    "level": "associate",
+                    "major": "string"
+                },
+                "desc": "string",
+                "skills": [
+                    "string"
+                ],
+                "lang": [
+                    "english",
+                    "arabic"
+                ],
+                "work_model": "remote"
             }
         },
     )
